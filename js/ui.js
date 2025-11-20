@@ -5,10 +5,11 @@
 
 import * as data from './data.js';
 
-import { 
-  getCategoryColor, 
-  createFilterBadge, 
-  formatDate, 
+import {
+  getCategoryIcon,
+  getCategoryColor,
+  createFilterBadge,
+  formatDate,
   formatCurrency,
   calculateBudgetPercentage,
   getBudgetColor
@@ -292,7 +293,10 @@ function renderExpenses() {
     const categoryCell = document.createElement('td');
     const categoryBadge = document.createElement('span');
     categoryBadge.className = `type-badge ${exp.category}`;
-    categoryBadge.textContent = exp.category;
+    const categoryIcon = document.createElement('i');
+    categoryIcon.className = `fas ${getCategoryIcon(exp.category)}`;
+    categoryBadge.appendChild(categoryIcon);
+    categoryBadge.appendChild(document.createTextNode(' ' + exp.category));
     categoryCell.appendChild(categoryBadge);
     row.appendChild(categoryCell);
     
@@ -401,7 +405,10 @@ function renderCardView() {
     // Category badge
     const categoryBadge = document.createElement('span');
     categoryBadge.className = `type-badge ${exp.category}`;
-    categoryBadge.textContent = exp.category;
+    const categoryIcon = document.createElement('i');
+    categoryIcon.className = `fas ${getCategoryIcon(exp.category)}`;
+    categoryBadge.appendChild(categoryIcon);
+    categoryBadge.appendChild(document.createTextNode(' ' + exp.category));
     leftSection.appendChild(categoryBadge);
     
     // Recurrence badge
@@ -466,7 +473,10 @@ function renderTopExpenses() {
     // Category badge
     const categoryBadge = document.createElement('span');
     categoryBadge.className = `type-badge ${exp.category}`;
-    categoryBadge.textContent = exp.category;
+    const categoryIcon = document.createElement('i');
+    categoryIcon.className = `fas ${getCategoryIcon(exp.category)}`;
+    categoryBadge.appendChild(categoryIcon);
+    categoryBadge.appendChild(document.createTextNode(' ' + exp.category));
     
     // Expense name
     const name = document.createElement('span');

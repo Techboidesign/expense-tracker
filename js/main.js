@@ -10,6 +10,7 @@ import * as events from './events.js';
 import * as selectionUI from './selection-ui.js';
 import { initSupabase } from './supabase-client.js';
 import { initAuth } from './auth.js';
+import { initCategoryGrid } from './modals.js';
 
 /**
  * Initialize the application when DOM is loaded
@@ -24,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize authentication
   initAuth();
   console.log('Authentication initialized');
+
+  // Initialize category grid
+  initCategoryGrid();
+  console.log('Category grid initialized');
 
   // Initialize the selection UI
   selectionUI.initializeSelectionUI();

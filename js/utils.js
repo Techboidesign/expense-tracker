@@ -4,25 +4,40 @@
  */
 
 /**
+ * Category configuration with icons and colors
+ */
+const CATEGORIES = [
+  { name: 'Housing', icon: 'fa-home', color: '#4f46e5' },
+  { name: 'Utilities', icon: 'fa-bolt', color: '#06b6d4' },
+  { name: 'Transportation', icon: 'fa-car', color: '#f59e0b' },
+  { name: 'Food', icon: 'fa-utensils', color: '#10b981' },
+  { name: 'Entertainment', icon: 'fa-film', color: '#8b5cf6' },
+  { name: 'Health', icon: 'fa-heartbeat', color: '#ec4899' },
+  { name: 'Personal', icon: 'fa-user', color: '#3b82f6' },
+  { name: 'Subscriptions', icon: 'fa-credit-card', color: '#6366f1' },
+  { name: 'Education', icon: 'fa-graduation-cap', color: '#9c27b0' },
+  { name: 'Other', icon: 'fa-ellipsis-h', color: '#6b7280' }
+];
+
+/**
+ * Get category icon
+ * @param {string} category - Expense category
+ * @returns {string} - FontAwesome icon class
+ */
+function getCategoryIcon(category) {
+  const cat = CATEGORIES.find(c => c.name === category);
+  return cat ? cat.icon : 'fa-ellipsis-h';
+}
+
+/**
  * Get color for a specific category
  * @param {string} category - Expense category
  * @returns {string} - Hex color code
  */
 function getCategoryColor(category) {
-    switch (category) {
-      case 'Housing': return '#4f46e5';
-      case 'Utilities': return '#06b6d4';
-      case 'Transportation': return '#f59e0b';
-      case 'Food': return '#10b981';
-      case 'Entertainment': return '#8b5cf6';
-      case 'Health': return '#ec4899';
-      case 'Personal': return '#3b82f6';
-      case 'Subscriptions': return '#6366f1';
-      case 'Education': return '#9c27b0'
-      case 'Other': return '#6b7280';
-      default: return '#6b7280';
-    }
-  }
+  const cat = CATEGORIES.find(c => c.name === category);
+  return cat ? cat.color : '#6b7280';
+}
   
   /**
    * Create a filter badge element
@@ -130,6 +145,8 @@ function getCategoryColor(category) {
   }
   
   export {
+    CATEGORIES,
+    getCategoryIcon,
     getCategoryColor,
     createFilterBadge,
     formatDate,

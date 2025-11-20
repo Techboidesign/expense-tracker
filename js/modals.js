@@ -5,7 +5,7 @@
 
 import * as data from './data.js';
 import { showElement, hideElement } from './ui.js';
-import { validateExpenseData, createExpenseObject } from './utils.js';
+import { CATEGORIES, validateExpenseData, createExpenseObject } from './utils.js';
 
 // Modal element references
 const modals = {
@@ -17,19 +17,72 @@ const modals = {
 };
 
 /**
+ * Initialize category grid
+ */
+function initCategoryGrid() {
+  initCategoryButtons('category-grid', 'type');
+  initCategoryButtons('edit-category-grid', 'edit-type');
+}
+
+/**
+ * Initialize category buttons for a specific grid
+ */
+function initCategoryButtons(gridId, inputId) {
+  const categoryGrid = document.getElementById(gridId);
+  const typeInput = document.getElementById(inputId);
+
+  if (!categoryGrid) return;
+
+  categoryGrid.innerHTML = '';
+
+  CATEGORIES.forEach(category => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'category-button';
+    button.dataset.category = category.name;
+
+    const icon = document.createElement('i');
+    icon.className = `fas ${category.icon}`;
+    icon.style.color = category.color;
+
+    const label = document.createElement('span');
+    label.textContent = category.name;
+
+    button.appendChild(icon);
+    button.appendChild(label);
+
+    button.addEventListener('click', () => {
+      categoryGrid.querySelectorAll('.category-button').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      button.classList.add('selected');
+      typeInput.value = category.name;
+    });
+
+    categoryGrid.appendChild(button);
+  });
+}
+
+/**
  * Open add expense modal
  */
 function openAddModal() {
   // Reset form
   document.getElementById('expense-form').reset();
-  
+
+  // Clear category selection
+  document.querySelectorAll('.category-button').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  document.getElementById('type').value = '';
+
   // Set default values - use Monthly as default
   document.querySelector('input[name="recurrence"][value="Monthly"]').checked = true;
-  
+
   // Set default due date to today
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('due-date').value = today;
-  
+
   showElement(modals.addModal);
 }
 
@@ -48,12 +101,20 @@ function openEditModal(id) {
   // Find the expense by ID
   const expense = data.expenses.find(exp => exp.id === parseInt(id));
   if (!expense) return;
-  
+
   // Populate form fields
   document.getElementById('edit-id').value = expense.id;
   document.getElementById('edit-name').value = expense.name;
   document.getElementById('edit-type').value = expense.category;
-  
+
+  // Select the category button
+  document.querySelectorAll('#edit-category-grid .category-button').forEach(btn => {
+    btn.classList.remove('selected');
+    if (btn.dataset.category === expense.category) {
+      btn.classList.add('selected');
+    }
+  });
+
   // Set the recurrence radio button based on the expense's recurrence
   if (expense.recurrence === 'Monthly') {
     document.getElementById('edit-monthly').checked = true;
@@ -62,11 +123,11 @@ function openEditModal(id) {
   } else if (expense.recurrence === 'One-time') {
     document.getElementById('edit-one-time').checked = true;
   }
-  
+
   document.getElementById('edit-amount').value = expense.amount;
   document.getElementById('edit-due-date').value = expense.dueDate || '';
   document.getElementById('edit-notes').value = expense.notes || '';
-  
+
   showElement(modals.editModal);
 }
 
@@ -260,6 +321,7 @@ function handleSetIncome(uiUpdateCallback) {
 
 export {
   modals,
+  initCategoryGrid,
   openAddModal,
   closeAddModal,
   openEditModal,
