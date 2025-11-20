@@ -1,0 +1,2399 @@
+:root {
+  --background: #ffffff;
+  --foreground: #020817;
+  --card: #ffffff;
+  --card-foreground: #020817;
+  --popover: #ffffff;
+  --popover-foreground: #020817;
+  --primary: #0f172a;
+  --primary-foreground: #f8fafc;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #f8fafc;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #1e293b;
+  --radius: 0.5rem;
+  
+  /* Category Colors */
+  --housing: #4f46e5;
+  --utilities: #06b6d4;
+  --transportation: #f59e0b;
+  --food: #10b981;
+  --entertainment: #8b5cf6;
+  --health: #ec4899;
+  --personal: #3b82f6;
+  --subscriptions: #6366f1;
+  --education: #9c27b0;  
+  --other: #6b7280;
+  
+  /* Budget Colors */
+  --budget-good: #22c55e;
+  --budget-warning: #f59e0b;
+  --budget-danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
+h1, h2, h3, .total-card-value .total-card-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  background-color: #f8fafc; /* shadcn/ui background */
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* HEADER STYLES */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.header-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.top-button-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.bottom-button-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+#add-expense-btn {
+  min-width: 160px;
+}
+
+/* Mobile Responsiveness Styles */
+@media (max-width: 768px) {
+  /* Total Cards Layout */
+  .total-cards {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .total-card {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .total-card-value {
+    font-size: 1.5rem;
+  }
+  
+  .total-card-title {
+    font-size: 0.75rem;
+  }
+  
+  .budget-progress {
+    height: 6px;
+    margin-top: 0.25rem;
+  }
+  
+  .budget-text {
+    font-size: 0.625rem;
+  }
+  
+  .income-value-container {
+    font-size: 0.75rem;
+  }
+  
+  .savings-display {
+    font-size: 1.5rem;
+  }
+}
+  /* Header and Buttons Responsiveness */
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .header-actions-container {
+      width: 100%;
+      align-items: stretch;
+    }
+    
+    .top-button-row {
+      justify-content: stretch;
+    }
+    
+    .bottom-button-row {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    #add-expense-btn,
+    .bottom-button-row .btn,
+    .bottom-button-row .dropdown {
+      width: 100%;
+    }
+    
+    .header-buttons .dropdown, .header-actions {
+      width: 100%;
+    }
+    
+    .header-buttons .btn, .header-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .dashboard {
+      grid-template-columns: 1fr;
+    }
+    
+    .filter-group {
+      min-width: 100%;
+    }
+    
+    .view-controls {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    /* Adjust dropdown to full width on mobile */
+    .dropdown-content {
+      width: 100%;
+      right: 0;
+      left: 0;
+    }
+    
+    .dropdown-content a {
+      padding: 1rem;
+      justify-content: center;
+    }
+  }
+
+  
+h1 {
+  font-size: 3rem;
+  line-height: 0;
+  font-weight: 900;
+  letter-spacing: -0.05rem;
+  margin-bottom: 2rem;
+  vertical-align: top;
+  color: var(--foreground);
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.subtitle {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.card {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.header-buttons{
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Dashboard */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Update the grid layout to have two cards in the second row */
+.total-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+}
+
+/* No longer need the third card to span columns since we have 2 cards in the second row */
+.total-cards .total-card:nth-child(3),
+.total-cards .total-card:nth-child(4) {
+  grid-column: auto;
+}
+
+/* Styling for the savings display */
+.savings-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+
+.savings-label {
+  border-bottom: 1px solid var(--border);
+  width:100%;
+}
+
+.savings-value {
+  font-weight: 500;
+}
+
+.income-value-container {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--other);
+  margin-bottom: 0.75rem;
+}
+
+.savings-display {
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.savings-display .savings-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+#monthly-income{
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+/* Modify the existing styles */
+.savings-positive {
+  color: var(--budget-good);
+}
+
+.savings-negative {
+  color: var(--budget-danger);
+}
+
+#monthly-savings.savings-positive {
+  color: var(--budget-good);
+  font-weight: 600;
+}
+
+#monthly-savings.savings-negative {
+  color: var(--budget-danger);
+  font-weight: 600;
+}
+
+/* If you want the entire card value to have a background indicator */
+.savings-indicator {
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+
+.savings-indicator.positive {
+  background-color: rgba(34, 197, 94, 0.1); /* Light green background */
+}
+
+.savings-indicator.negative {
+  background-color: rgba(239, 68, 68, 0.1); /* Light red background */
+}
+
+
+/* For smaller screens, revert to single column */
+@media (max-width: 768px) {
+  .total-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.total-card {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.total-card-title {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+  background-color: var(--accent);
+}
+
+.total-card-value {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.5rem;
+}
+
+.total-card-budget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.budget-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px; /* Set a specific height for consistency */
+  width: 28px; /* Optional: make buttons square */
+  padding: 0; /* Remove padding to keep icon centered */
+  padding: 0.25rem 0.5rem;
+  background-color: transparent;
+  color: var(--muted-foreground);
+  border: 1px solid var(--other);
+  stroke: var(--muted-foreground);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: top !important;
+}
+
+#edit-budget-btn, #edit-income-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px; /* Set a specific height for consistency */
+  width: 28px; /* Optional: make buttons square */
+  padding: 0; /* Remove padding to keep icon centered */
+}
+
+
+
+.budget-edit-btn:hover {
+  background-color: var(--accent);
+  color: var(--foreground);
+}
+
+.budget-edit-btn i {
+  margin-right: 0.25rem;
+  font-size: 0.7rem;
+}
+
+
+
+
+.budget-progress {
+  height: 8px;
+  background-color: var(--muted);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--budget-good);
+  border-radius: 4px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.budget-text {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+.chart-title {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+  background-color: var(--accent);
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.chart-container {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* View Controls */
+.view-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.view-selector {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.view-selector .btn {
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem 0.75rem;
+}
+
+.view-selector .btn.active {
+  background-color: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.view-selector .btn .btn-icon {
+  margin-right: 0.375rem;
+}
+
+.view-btn {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  border: 1px solid var(--border);
+}
+
+.view-btn.active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#custom-date-range {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-group:has(#date-range) {
+  flex-grow: 2;
+}
+
+.expense-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.expense-indicator {
+  height: 4px;
+  border-radius: 2px;
+  width: 80%;
+}
+
+
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border) !important;
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+}
+
+.filter-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #64748b;
+}
+
+.filter-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2rem;
+}
+
+
+#list-view .view-controls, #card-view .view-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+#list-view .view-controls h2, #card-view .view-controls h2 {
+  margin-bottom: 0;  /* Remove bottom margin from heading */
+}
+
+/* FILTERS HEADERS */ 
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  background-color: #f8fafc; /* Light background to match the design */
+}
+
+@media (max-width: 768px) {
+  .filters-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .filter-group:has(#custom-date-range) {
+    grid-column: 1 / -1; /* Make the date range filter take full width */
+  }
+  
+  #custom-date-range {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  #custom-date-range input {
+    width: 100%;
+  }
+}
+
+.filters-header h2 {
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+
+.active-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--personal);
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--input);
+  gap: 0.5rem;
+  vertical-align: middle;
+}
+
+.filter-badge span {
+  margin-right: 0rem;
+}
+
+.filter-badge .remove {
+  cursor: pointer;
+  width: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--popover-foreground);
+}
+
+.filter-badge .remove:hover {
+  background-color: var(--background);
+  color: var(--primary);
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: relative;
+}
+
+/* Style the actions column */
+th:last-child {
+  width: 80px;
+  text-align: right;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+td {
+  border-bottom: 1px solid var(--border);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: var(--accent);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  float: right;
+}
+
+
+/* SORTABLE TABLE */
+/* Sortable table headers styling */
+th.sortable {
+  cursor: pointer;
+  white-space: nowrap; /* Keep header text and arrows on same line */
+  position: relative;
+  padding-right: 1rem; /* Reduce right padding since arrows are now inline */
+}
+
+.sort-arrows {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  height: 1.5em;
+  font-size: 0.875rem;
+  margin-left: 8px; /* Add margin after the column name */
+  vertical-align: middle;
+}
+
+.sort-icon {
+  color: #cbd5e1; /* Default light color */
+  line-height: 0.75em;
+  cursor: pointer;
+}
+
+.sort-icon:hover {
+  color: #475569 !important; /* Darker color on hover, with higher specificity */
+  transform: scale(1.2); /* Slightly enlarge the arrow */
+  transition: all 0.1s ease; /* Smooth transition */
+}
+
+.sort-icon.active {
+  color: #0f172a; /* Dark color when active */
+}
+
+/* Hover effect for sortable headers */
+th.sortable:hover {
+  background-color: #f1f5f9;
+}
+
+th.sortable:hover .sort-icon {
+  color: #94a3b8; /* Slightly darker than default, but lighter than individual hover */
+}
+
+
+/* Category badges */
+.type-badge, .category-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+}
+
+.Housing {
+  background-color: var(--housing);
+}
+
+.Utilities {
+  background-color: var(--utilities);
+}
+
+.Transportation {
+  background-color: var(--transportation);
+}
+
+.Food {
+  background-color: var(--food);
+}
+
+.Entertainment {
+  background-color: var(--entertainment);
+}
+
+.Health {
+  background-color: var(--health);
+}
+
+.Personal {
+  background-color: var(--personal);
+}
+
+.Subscriptions {
+  background-color: var(--subscriptions);
+}
+
+.Education {
+  background-color: var(--education);
+}
+
+.Other {
+  background-color: var(--other);
+}
+
+/* Recurrence badges */
+.Monthly, .Yearly, .One-time, .expense-type-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.Monthly {
+  background-color: #fef9c3; /* yellow/100 */
+  color: #854d0e; /* yellow/800 */
+}
+
+.Yearly {
+  background-color: #e0f2fe; /* blue/100 */
+  color: #075985; /* blue/800 */
+}
+
+.One-time {
+  background-color: #a2e6d5; /* green/100 */
+  color: #054a47; /* green/800 */
+}
+
+
+/* Modal Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background-color: var(--background);
+  margin: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  max-width: 500px;
+  overflow: hidden;
+  animation: modalEnter 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0px !important;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--foreground);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background-color: var(--muted);
+}
+
+/* Warning styles for clear data modal */
+.warning-text {
+  font-weight: 500;
+  color: var(--destructive);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.warning-icon {
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.btn-warning {
+  color: var(--destructive);
+}
+
+.btn-warning:hover {
+  background-color: rgba(239, 68, 68, 0.1); /* Light red background */
+  border-color: var(--destructive);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center !important; /* Override any other alignment */
+  padding: 3rem 1.5rem;
+  color: var(--muted-foreground);
+}
+
+/* Make sure the empty cell doesn't inherit the right alignment */
+td.empty-state {
+  text-align: center !important;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block; /* Ensures it's centered */
+}
+
+.empty-state-text {
+  font-size: 0.875rem;
+  display: block; /* Ensures it's centered */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalEnter {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+  background-color: var(--background);
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  min-width: 200px;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 40;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem; /* Add padding to create invisible bridge */
+  top: calc(100% - 0.5rem); /* Position dropdown to overlap with button */
+  overflow: visible; /* Allow the dropdown to extend beyond its bounds */
+}
+
+/* Add an invisible bridge to prevent gap */
+.dropdown::after {
+  content: '';
+  position: absolute;
+  height: 0.5rem; /* Same as padding-top */
+  left: 0;
+  right: 0;
+  background: transparent; /* Invisible but still captures hover */
+  z-index: 39;
+}
+
+.dropdown-content a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--accent);
+}
+
+.show {
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+/* PRINT AS A PDF STYLING */ 
+/* Print styles */
+@media print {
+  body.print-mode * {
+    visibility: hidden;
+  }
+  
+  body.print-mode .container {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  body.print-mode .container * {
+    visibility: visible;
+  }
+  
+  /* Hide elements we don't want in the PDF */
+  body.print-mode .header-actions,
+  body.print-mode .filter-controls,
+  body.print-mode #download-dropdown,
+  body.print-mode .view-controls {
+    display: none !important;
+  }
+  
+  /* Improve spacing and appearance for printing */
+  body.print-mode {
+    background-color: white !important;
+  }
+  
+  body.print-mode .container {
+    padding: 20px;
+    box-shadow: none;
+  }
+  
+  body.print-mode .chart-container {
+    height: 300px;
+    page-break-inside: avoid;
+  }
+  
+  body.print-mode table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+  
+  body.print-mode tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  body.print-mode th,
+  body.print-mode td {
+    border: 1px solid #eaeaea;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+  }
+  
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-group {
+    min-width: 100%;
+  }
+  
+  .view-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .top-expenses-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calendar-day.other-month {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.calendar-day-number {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-expense {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Top Expenses */
+.top-expenses {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Updated Top Expenses Styling */
+.top-expenses-list {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background-color: var(--card);
+  margin-top: 1.75rem;
+}
+
+.top-expense-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--card);
+  transition: background-color 0.2s;
+}
+
+.top-expense-item:last-child {
+  border-bottom: none;
+}
+
+.top-expense-item:hover {
+  background-color: var(--accent);
+}
+
+.top-expense-name {
+  flex-grow: 1;
+  margin-left: 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top-expense-amount {
+  font-weight: 600;
+  margin-left: auto;
+  font-size: 0.875rem;
+}
+
+/* Make the category badges compact */
+.type-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  width: auto; /* Make badges only as wide as their content */
+}
+
+.category-header {
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: center;
+}
+
+.expense-name {
+  padding: 0.75rem 1rem 0.25rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.expense-amount {
+  padding: 0.25rem 1rem 0.75rem;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Add background colors for the category headers */
+.category-header.Housing { background-color: var(--housing); }
+.category-header.Utilities { background-color: var(--utilities); }
+.category-header.Transportation { background-color: var(--transportation); }
+.category-header.Food { background-color: var(--food); }
+.category-header.Entertainment { background-color: var(--entertainment); }
+.category-header.Health { background-color: var(--health); }
+.category-header.Personal { background-color: var(--personal); }
+.category-header.Subscriptions { background-color: var(--subscriptions); }
+.category-header.Other { background-color: var(--other); }
+
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .top-expenses-list {
+    /* Keep the list view on mobile */
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+
+#card-view-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--muted-foreground);
+}
+
+/* CARD VIEW */
+#card-view-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.card-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--muted-foreground);
+}
+
+.expense-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s, 
+}
+
+.expense-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* For card view */
+.expense-card .action-buttons .btn {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Add a slight fade-in effect */
+tr:hover .action-buttons .btn,
+.expense-card:hover .action-buttons .btn {
+  animation: fadeIn 0.2s ease-in;
+}
+
+/* Optional: add hover effect to buttons */
+.action-buttons .btn:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.expense-card-row {
+  display: flex;
+  align-items: center;
+}
+
+.expense-card-title {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.expense-card-amount {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.expense-type-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+}
+
+
+/* Reuse existing styles for expense type badges */
+.expense-type-badge.Monthly {
+  background-color: #fef9c3; /* yellow/100 */
+  color: #854d0e; /* yellow/800 */
+}
+
+.expense-type-badge.Quarterly {
+  background-color: #e0f2fe; /* blue/100 */
+  color: #075985; /* blue/800 */
+}
+
+.expense-type-badge.Yearly {
+  background-color: #d1fae5; /* green/100 */
+  color: #065f46; /* green/800 */
+}
+
+.expense-type-badge.One-time {
+  background-color: #a2e6d5; /* green/100 */
+  color: #054a47; /* green/800 */
+}
+
+.expense-card .action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Responsive adjustment */
+@media (max-width: 640px) {
+  #card-view-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+input, select, textarea {
+  appearance: none;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: var(--radius);
+  border: 1px solid var(--input);
+  background-color: var(--background);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input, textarea {
+  background-image: none !important;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px rgba(30, 41, 59, 0.1);
+}
+
+select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-group:has(select:focus) label {
+  color: var(--foreground);
+}
+
+/* Toggle control */
+.toggle-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.toggle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-label {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.toggle input[type="radio"]:checked + .toggle-label {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: var(--housing); /* slightly darker */
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.btn-secondary:hover {
+  background-color: #e2e8f0; /* slightly darker */
+}
+
+.btn-destructive {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+.btn-destructive:hover {
+  background-color: #dc2626; /* slightly darker */
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--input);
+  color: var(--foreground);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--input);
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background-color: var(--accent);
+  border-color: var(--housing);
+}
+
+.show {
+  display: block !important;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Style the actions column */
+th:last-child {
+  width: 80px;
+  text-align: right;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+td {
+  border-bottom: 1px solid var(--border);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background-color: var(--accent);
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center; /* This vertically centers the buttons */
+  gap: 0.5rem; /* Maintains space between buttons */
+  height: 100%; /* Ensures the container takes the full height of its parent */
+  float: right;
+}
+
+/* If you want to make sure the buttons themselves are the same height */
+.action-buttons .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px; /* Set a specific height for consistency */
+  width: 28px; /* Optional: make buttons square */
+  padding: 0; /* Remove padding to keep icon centered */
+  margin-bottom: 0px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+tr:hover .action-buttons .btn,
+.expense-card:hover .action-buttons .btn {
+  opacity: 1;
+}
+
+.action-buttons .btn i {
+  margin: 0; /* Remove any margin from icons */
+}
+
+/* Category badges */
+.type-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+}
+
+.Housing {
+  background-color: var(--housing);
+}
+
+.Utilities {
+  background-color: var(--utilities);
+}
+
+.Transportation {
+  background-color: var(--transportation);
+}
+
+.Food {
+  background-color: var(--food);
+}
+
+.Entertainment {
+  background-color: var(--entertainment);
+}
+
+.Health {
+  background-color: var(--health);
+}
+
+.Personal {
+  background-color: var(--personal);
+}
+
+.Subscriptions {
+  background-color: var(--subscriptions);
+}
+
+.Other {
+  background-color: var(--other);
+}
+
+/* Expense Type badges */
+.Recurring, .One-time, .Monthly, .Quarterly, .Yearly {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.Recurring, .Monthly {
+  background-color: #fef9c3; /* yellow/100 */
+  color: #854d0e; /* yellow/800 */
+}
+
+.Quarterly {
+  background-color: #e0f2fe; /* blue/100 */
+  color: #075985; /* blue/800 */
+}
+
+.Yearly {
+  background-color: #d1fae5; /* green/100 */
+  color: #065f46; /* green/800 */
+}
+
+.One-time {
+  background-color: #bef5fe; /* green/100 */
+  color: #0d5246; /* green/800 */
+}
+
+
+/* Modal Styles */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 50;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background-color: var(--background);
+  margin: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  width: 95%;
+  max-width: 500px;
+  overflow: hidden;
+  animation: modalEnter 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--foreground);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background-color: var(--muted);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center !important; /* Override any other alignment */
+  padding: 3rem 1.5rem;
+  color: var(--muted-foreground);
+}
+
+/* Make sure the empty cell doesn't inherit the right alignment */
+td.empty-state {
+  text-align: center !important;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block; /* Ensures it's centered */
+}
+
+.empty-state-text {
+  font-size: 0.875rem;
+  display: block; /* Ensures it's centered */
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalEnter {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+  background-color: var(--background);
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  min-width: 200px;
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 40;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem; /* Add padding to create invisible bridge */
+  top: calc(100% - 0.5rem); /* Position dropdown to overlap with button */
+  overflow: visible; /* Allow the dropdown to extend beyond its bounds */
+}
+
+/* Add an invisible bridge to prevent gap */
+.dropdown::after {
+  content: '';
+  position: absolute;
+  height: 0.5rem; /* Same as padding-top */
+  left: 0;
+  right: 0;
+  background: transparent; /* Invisible but still captures hover */
+  z-index: 39;
+}
+
+.dropdown-content a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown-content a:hover {
+  background-color: var(--accent);
+}
+
+.show {
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+/* PRINT AS A PDF STYLING */ 
+/* Print styles */
+@media print {
+  body.print-mode * {
+    visibility: hidden;
+  }
+  
+  body.print-mode .container {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  body.print-mode .container * {
+    visibility: visible;
+  }
+  
+  /* Hide elements we don't want in the PDF */
+  body.print-mode .header-actions,
+  body.print-mode .filter-controls,
+  body.print-mode #download-dropdown,
+  body.print-mode .view-controls {
+    display: none !important;
+  }
+  
+  /* Improve spacing and appearance for printing */
+  body.print-mode {
+    background-color: white !important;
+  }
+  
+  body.print-mode .container {
+    padding: 20px;
+    box-shadow: none;
+  }
+  
+  body.print-mode .chart-container {
+    height: 300px;
+    page-break-inside: avoid;
+  }
+  
+  body.print-mode table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+  
+  body.print-mode tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+  
+  body.print-mode th,
+  body.print-mode td {
+    border: 1px solid #eaeaea;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .header-actions {
+    width: 100%;
+  }
+  
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-group {
+    min-width: 100%;
+  }
+  
+  .view-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+}
+
+
+
+/* Category Breakdown */
+.category-breakdown {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.breakdown-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+.breakdown-container {
+  background-color: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 0;
+}
+
+
+.category-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s;
+}
+
+.category-breakdown-item:hover {
+  background-color: var(--accent);
+}
+
+.category-breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.category-name {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.category-amount {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.category-percentage {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin-left: 0.5rem;
+}
+
+.category-badge {
+  display: inline-flex;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: white;
+  margin-right: 1rem;
+}
+
+.category-badge.Housing { background-color: var(--housing); }
+.category-badge.Utilities { background-color: var(--utilities); }
+.category-badge.Transportation { background-color: var(--transportation); }
+.category-badge.Food { background-color: var(--food); }
+.category-badge.Entertainment { background-color: var(--entertainment); }
+.category-badge.Health { background-color: var(--health); }
+.category-badge.Personal { background-color: var(--personal); }
+.category-badge.Subscriptions { background-color: var(--subscriptions); }
+.category-badge.Other { background-color: var(--other); }
+
+
+.category-name span:nth-child(2) {
+  margin-left: 0.5rem;
+}
+
+/* Two-column layout for Top Expenses and Category Breakdown */
+.expense-analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .expense-analysis-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+/* Checkbox container styling */
+.checkbox-container {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease, width 0.2s ease, margin-right 0.2s ease;
+  position: absolute;
+  left: 4px;
+  bottom: 10px;
+  z-index: 5;
+}
+
+/* Show checkbox on row hover */
+tr:hover .checkbox-container {
+  opacity: 1;
+}
+
+/* Always show checkbox when any row is selected */
+.selection-active .checkbox-container {
+  opacity: 1;
+}
+
+/* Ensure table has fixed layout */
+table {
+  table-layout: fixed; /* Prevents column width changes */
+  width: 100%;
+}
+
+/* Position adjustment for name cell only */
+td:first-of-type,
+th:first-of-type {
+  position: relative;
+  padding-left: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 40%; /* Reduced width for name column */
+}
+
+/* Push only the name text right when checkbox is visible */
+tr:hover td:first-of-type, 
+.selection-active td:first-of-type {
+  padding-left: 2.5rem; /* Space for checkbox */
+  transition: padding-left 0.2s ease;
+}
+
+/* Style for category column */
+td:nth-of-type(2),
+th:nth-of-type(2) {
+  width: 18%; /* Fixed width for category */
+}
+
+/* Style for recurrence column */
+td:nth-of-type(3),
+th:nth-of-type(3) {
+  width: 12%; /* Fixed width for recurrence */
+}
+
+/* Style for amount column */
+td:nth-of-type(4),
+th:nth-of-type(4) {
+  width: 12%; /* Fixed width for amount */
+}
+
+/* Style for due date column */
+td:nth-of-type(5),
+th:nth-of-type(5) {
+  width: 12%; /* Fixed width for due date */
+}
+
+/* Style for actions column */
+td:last-of-type,
+th:last-of-type {
+  width: 10%; /* Fixed width for actions */
+}
+
+@media (max-width: 768px) {
+    /* Style for category column */
+    td:nth-of-type(2),
+    th:nth-of-type(2) {
+      width: 30%; /* Fixed width for category */
+    }
+
+    /* Style for recurrence column */
+    td:nth-of-type(3),
+    th:nth-of-type(3) {
+      display: none;
+    }
+
+    /* Style for amount column */
+    td:nth-of-type(4),
+    th:nth-of-type(4) {
+      width: 20%; /* Fixed width for amount */
+    }
+
+    /* Style for due date column */
+    td:nth-of-type(5),
+    th:nth-of-type(5) {
+      display: none;
+    }
+
+    /* Style for actions column */
+    td:last-of-type,
+    th:last-of-type {
+      width: 10%; /* Fixed width for actions */
+    }
+}
+
+
+/* Styling for the selection controls panel */
+.selection-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  animation: slideUp 0.3s ease-out;
+}
+
+.selection-counter {
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+/* Buttons in selection panel */
+.selection-controls .btn {
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.selection-controls .btn-destructive {
+  background-color: #ef4444;
+}
+
+.selection-controls .btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+}
+
+.selection-controls .btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animation for the selection panel */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Checkbox styling */
+.checkbox-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--muted-foreground);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.checkbox-custom:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.checkbox-custom:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Selected row styling */
+tr.selected {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Animation for selection */
+@keyframes pulse {
+  0% { background-color: rgba(99, 102, 241, 0.1); }
+  50% { background-color: rgba(99, 102, 241, 0.2); }
+  100% { background-color: rgba(99, 102, 241, 0.1); }
+}
+
+tr.selected {
+  animation: pulse 2s infinite;
+}
+
+/* Confirmation modal */
+.delete-confirmation-modal {
+  max-width: 400px;
+}
+
+.delete-confirmation-modal .modal-title {
+  color: var(--destructive);
+}
+
+.delete-count {
+  font-weight: bold;
+}
+
+
+
+
+
+/* Card selection styles */
+.expense-card {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+/* Selected card styling */
+.expense-card.selected {
+  border-color: var(--primary);
+  background-color: rgba(99, 102, 241, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkbox for cards - initially hidden */
+.expense-card .checkbox-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.2s ease;
+}
+
+/* Show checkbox when card is hovered */
+.expense-card:hover .checkbox-container,
+.expense-card.selected .checkbox-container,
+.selection-active .expense-card .checkbox-container {
+  opacity: 1;
+}
+
+/* Pulse animation for selected cards */
+@keyframes cardPulse {
+  0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+.expense-card.selected {
+  animation: cardPulse 2s infinite;
+}
+
+/* Add padding to card content when selected to account for checkbox */
+.expense-card.selected .expense-card-row:first-child,
+.expense-card:hover .expense-card-row:first-child,
+.selection-active .expense-card .expense-card-row:first-child {
+  padding-left: 30px;
+  transition: padding-left 0.2s ease;
+}
+
+/* Don't apply hover transform when card is selected */
+.expense-card.selected:hover {
+  transform: translateY(-2px);
+}
