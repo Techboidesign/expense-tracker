@@ -93,6 +93,8 @@ export function initAuth() {
   if (isLoggedIn()) {
     showApp();
   } else {
-    hideApp();
+    appContent.style.display = 'block';
+    userIcon.style.display = 'none';
+    if (headerLoginBtn) headerLoginBtn.style.display = 'flex';
   }
 }
