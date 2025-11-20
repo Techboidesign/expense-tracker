@@ -181,6 +181,15 @@ async function deleteExpense(id) {
 }
 
 /**
+ * Clear all expenses (used when user logs out)
+ */
+function clearAllExpenses() {
+  expenses = [];
+  monthlyBudget = 0;
+  monthlyIncome = 0;
+}
+
+/**
  * Set monthly budget and save to Supabase or localStorage
  * @param {number} amount - The budget amount
  */

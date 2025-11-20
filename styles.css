@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
 :root {
   --background: #ffffff;
   --foreground: #020817;
@@ -19,7 +21,7 @@
   --input: #e2e8f0;
   --ring: #1e293b;
   --radius: 0.5rem;
-  
+
   /* Category Colors */
   --housing: #4f46e5;
   --utilities: #06b6d4;
@@ -29,9 +31,9 @@
   --health: #ec4899;
   --personal: #3b82f6;
   --subscriptions: #6366f1;
-  --education: #9c27b0;  
+  --education: #9c27b0;
   --other: #6b7280;
-  
+
   /* Budget Colors */
   --budget-good: #22c55e;
   --budget-warning: #f59e0b;
@@ -44,8 +46,6 @@
   padding: 0;
   font-family: "Space Grotesk", sans-serif;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 
 h1, h2, h3, .total-card-value .total-card-title {
   font-family: "Space Grotesk", sans-serif;
