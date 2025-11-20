@@ -1,5 +1,5 @@
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://tyeyqptdmcjhmncxzoew.supabase.co';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5ZXlxcHRkbWNqaG1uY3h6b2V3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM2MzQ2MDgsImV4cCI6MjA3OTIxMDYwOH0.pMr1pdTE_RoZf-en7eBKyRqhoScACQ0aTyRsgaR0DrE';
 
 let supabaseClient = null;
 let currentUser = null;
@@ -32,7 +32,7 @@ export async function login(username, password) {
       .from('users')
       .select('*')
       .eq('username', username)
-      .eq('password_hash', password)
+      .eq('password', password)
       .maybeSingle();
 
     if (error) {
@@ -86,14 +86,20 @@ export async function getExpenses() {
       .from('expenses')
       .select('*')
       .eq('user_id', user.id)
-      .order('due_date', { ascending: true });
+      .order('date', { ascending: true });
 
     if (error) {
       console.error('Get expenses error:', error);
       return { data: [], error: error.message };
     }
 
-    return { data: data || [] };
+    const expenses = (data || []).map(expense => ({
+      ...expense,
+      due_date: expense.date,
+      type: expense.category
+    }));
+
+    return { data: expenses };
   } catch (err) {
     console.error('Get expenses exception:', err);
     return { data: [], error: err.message };
@@ -108,8 +114,13 @@ export async function addExpense(expense) {
 
   try {
     const expenseData = {
-      ...expense,
-      user_id: user.id
+      user_id: user.id,
+      name: expense.name,
+      category: expense.type,
+      amount: expense.amount,
+      recurrence: expense.recurrence,
+      date: expense.due_date,
+      notes: expense.notes || ''
     };
 
     const { data, error } = await client
@@ -123,7 +134,13 @@ export async function addExpense(expense) {
       return { error: error.message };
     }
 
-    return { data };
+    const mappedData = {
+      ...data,
+      due_date: data.date,
+      type: data.category
+    };
+
+    return { data: mappedData };
   } catch (err) {
     console.error('Add expense exception:', err);
     return { error: err.message };
@@ -137,9 +154,17 @@ export async function updateExpense(id, updates) {
   if (!client || !user) return { error: 'Not authenticated' };
 
   try {
+    const mappedUpdates = {};
+    if (updates.name !== undefined) mappedUpdates.name = updates.name;
+    if (updates.type !== undefined) mappedUpdates.category = updates.type;
+    if (updates.amount !== undefined) mappedUpdates.amount = updates.amount;
+    if (updates.recurrence !== undefined) mappedUpdates.recurrence = updates.recurrence;
+    if (updates.due_date !== undefined) mappedUpdates.date = updates.due_date;
+    if (updates.notes !== undefined) mappedUpdates.notes = updates.notes;
+
     const { data, error } = await client
       .from('expenses')
-      .update(updates)
+      .update(mappedUpdates)
       .eq('id', id)
       .eq('user_id', user.id)
       .select()
@@ -150,7 +175,13 @@ export async function updateExpense(id, updates) {
       return { error: error.message };
     }
 
-    return { data };
+    const mappedData = {
+      ...data,
+      due_date: data.date,
+      type: data.category
+    };
+
+    return { data: mappedData };
   } catch (err) {
     console.error('Update expense exception:', err);
     return { error: err.message };
@@ -182,6 +213,56 @@ export async function deleteExpense(id) {
   }
 }
 
+export async function getBudget() {
+  const client = getSupabaseClient();
+  const user = getCurrentUser();
+
+  if (!client || !user) return { data: null, error: 'Not authenticated' };
+
+  try {
+    const { data, error } = await client
+      .from('budgets')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Get budget error:', error);
+      return { data: null, error: error.message };
+    }
+
+    return { data: data ? data.monthly_budget : 0 };
+  } catch (err) {
+    console.error('Get budget exception:', err);
+    return { data: null, error: err.message };
+  }
+}
+
+export async function getIncome() {
+  const client = getSupabaseClient();
+  const user = getCurrentUser();
+
+  if (!client || !user) return { data: null, error: 'Not authenticated' };
+
+  try {
+    const { data, error } = await client
+      .from('income')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Get income error:', error);
+      return { data: null, error: error.message };
+    }
+
+    return { data: data ? data.monthly_income : 0 };
+  } catch (err) {
+    console.error('Get income exception:', err);
+    return { data: null, error: err.message };
+  }
+}
+
 export async function updateUserBudget(budget, income) {
   const client = getSupabaseClient();
   const user = getCurrentUser();
@@ -189,28 +270,31 @@ export async function updateUserBudget(budget, income) {
   if (!client || !user) return { error: 'Not authenticated' };
 
   try {
-    const updates = {};
-    if (budget !== undefined) updates.monthly_budget = budget;
-    if (income !== undefined) updates.monthly_income = income;
+    if (budget !== undefined) {
+      const { error: budgetError } = await client
+        .from('budgets')
+        .upsert({ user_id: user.id, monthly_budget: budget }, { onConflict: 'user_id' });
 
-    const { data, error } = await client
-      .from('users')
-      .update(updates)
-      .eq('id', user.id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Update user error:', error);
-      return { error: error.message };
+      if (budgetError) {
+        console.error('Update budget error:', budgetError);
+        return { error: budgetError.message };
+      }
     }
 
-    currentUser = { ...currentUser, ...updates };
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    if (income !== undefined) {
+      const { error: incomeError } = await client
+        .from('income')
+        .upsert({ user_id: user.id, monthly_income: income }, { onConflict: 'user_id' });
 
-    return { data };
+      if (incomeError) {
+        console.error('Update income error:', incomeError);
+        return { error: incomeError.message };
+      }
+    }
+
+    return { data: { budget, income } };
   } catch (err) {
-    console.error('Update user exception:', err);
+    console.error('Update budget/income exception:', err);
     return { error: err.message };
   }
 }

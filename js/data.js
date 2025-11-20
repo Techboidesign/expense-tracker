@@ -52,7 +52,7 @@ async function loadFromSupabase() {
   expenses = data.map(exp => ({
     id: exp.id,
     name: exp.name,
-    category: exp.category,
+    category: exp.type,
     recurrence: exp.recurrence,
     amount: parseFloat(exp.amount),
     dueDate: exp.due_date,
@@ -60,8 +60,11 @@ async function loadFromSupabase() {
     createdAt: exp.created_at
   }));
 
-  monthlyBudget = parseFloat(user.monthly_budget) || 0;
-  monthlyIncome = parseFloat(user.monthly_income) || 0;
+  const { data: budgetData } = await supabaseClient.getBudget();
+  monthlyBudget = parseFloat(budgetData) || 0;
+
+  const { data: incomeData } = await supabaseClient.getIncome();
+  monthlyIncome = parseFloat(incomeData) || 0;
 
   console.log(`Loaded ${expenses.length} expenses from Supabase`);
 }
@@ -82,7 +85,7 @@ async function addExpense(expense) {
     const expenseData = {
       id: expense.id,
       name: expense.name,
-      category: expense.category,
+      type: expense.category,
       recurrence: expense.recurrence,
       amount: expense.amount,
       due_date: expense.dueDate,
@@ -117,7 +120,7 @@ async function updateExpense(id, updatedExpense) {
     if (supabaseClient.isLoggedIn()) {
       const updates = {
         name: updatedExpense.name,
-        category: updatedExpense.category,
+        type: updatedExpense.category,
         recurrence: updatedExpense.recurrence,
         amount: updatedExpense.amount,
         due_date: updatedExpense.dueDate,

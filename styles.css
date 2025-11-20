@@ -2432,15 +2432,3 @@ tr.selected {
   margin-top: 8px;
   min-height: 20px;
 }
-
-
-@media (max-width: 1024px) {
-  .user-icon {
-    position: static;
-    margin-bottom: 16px;
-  }
-
-  .header {
-    padding-right: 24px;
-  }
-}
