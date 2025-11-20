@@ -25,39 +25,38 @@
         <h1>Expense Tracker</h1>
         <p class="subtitle">Keep track of your recurring and one-time expenses</p>
       </div>
-      <div id="user-icon" class="user-icon" style="display: none;">
-        <div class="user-avatar">
-          <i class="fas fa-user"></i>
-        </div>
-        <div class="user-info">
-          <span id="user-name" class="user-name"></span>
-          <button id="logout-btn" class="logout-btn">Logout</button>
-        </div>
-      </div>
-      <div class="header-actions-container">
-        <div class="top-button-row">
-          <button id="add-expense-btn" class="btn btn-primary">
-            <i class="fas fa-plus btn-icon"></i>Add Expense
+      <div class="header-actions">
+        <button id="add-expense-btn" class="btn btn-primary">
+          <i class="fas fa-plus btn-icon"></i>Add Expense
+        </button>
+        <div class="dropdown">
+          <button id="download-btn" class="btn btn-outline">
+            <i class="fas fa-download btn-icon"></i>Download
           </button>
-        </div>
-        <div class="bottom-button-row">
-          <div class="dropdown">
-            <button id="download-btn" class="btn btn-outline">
-              <i class="fas fa-download btn-icon"></i>Download
-            </button>
-            <div id="download-dropdown" class="dropdown-content">
-              <a href="#" id="download-excel"><i class="fas fa-file-excel btn-icon"></i>Download as Excel</a>
-              <a href="#" id="print-pdf"><i class="fas fa-file-pdf btn-icon"></i>Print as PDF</a>
-            </div>
+          <div id="download-dropdown" class="dropdown-content">
+            <a href="#" id="download-excel"><i class="fas fa-file-excel btn-icon"></i>Download as Excel</a>
+            <a href="#" id="print-pdf"><i class="fas fa-file-pdf btn-icon"></i>Print as PDF</a>
           </div>
-          <div class="dropdown">
-            <button id="export-import-btn" class="btn btn-outline">
-              <i class="fas fa-exchange-alt btn-icon"></i>Export / Import
-            </button>
-            <div id="export-import-dropdown" class="dropdown-content">
-              <a href="#" id="export-json"><i class="fas fa-file-export btn-icon"></i>Export Data</a>
-              <a href="#" id="import-json"><i class="fas fa-file-import btn-icon"></i>Import Data</a>
-            </div>
+        </div>
+        <div class="dropdown">
+          <button id="export-import-btn" class="btn btn-outline">
+            <i class="fas fa-exchange-alt btn-icon"></i>Export / Import
+          </button>
+          <div id="export-import-dropdown" class="dropdown-content">
+            <a href="#" id="export-json"><i class="fas fa-file-export btn-icon"></i>Export Data</a>
+            <a href="#" id="import-json"><i class="fas fa-file-import btn-icon"></i>Import Data</a>
+          </div>
+        </div>
+        <button id="login-btn" class="btn btn-outline user-login-btn">
+          <i class="fas fa-user btn-icon"></i>Login
+        </button>
+        <div id="user-icon" class="user-icon" style="display: none;">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-info">
+            <span id="user-name" class="user-name"></span>
+            <button id="logout-btn" class="logout-btn">Logout</button>
           </div>
         </div>
       </div>

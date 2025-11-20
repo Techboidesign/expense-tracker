@@ -82,28 +82,14 @@ body {
   flex: 1;
 }
 
-.header-actions-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: flex-end;
-}
-
-.top-button-row {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.bottom-button-row {
+.header-actions {
   display: flex;
   gap: 0.5rem;
-  justify-content: flex-end;
-  width: 100%;
+  align-items: center;
 }
 
-#add-expense-btn {
-  min-width: 160px;
+.user-login-btn {
+  min-width: 100px;
 }
 
 /* Mobile Responsiveness Styles */
@@ -152,57 +138,48 @@ body {
       align-items: flex-start;
       gap: 1rem;
     }
-    
-    .header-actions-container {
-      width: 100%;
-      align-items: stretch;
-    }
-    
-    .top-button-row {
-      justify-content: stretch;
-    }
-    
-    .bottom-button-row {
+
+    .header-actions {
       flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    #add-expense-btn,
-    .bottom-button-row .btn,
-    .bottom-button-row .dropdown {
       width: 100%;
     }
-    
-    .header-buttons .dropdown, .header-actions {
+
+    .header-actions .btn,
+    .header-actions .dropdown {
       width: 100%;
     }
-    
-    .header-buttons .btn, .header-actions .btn {
+
+    .header-actions .dropdown button {
       width: 100%;
       justify-content: center;
     }
-    
+
+    .user-icon {
+      width: 100%;
+      justify-content: center;
+    }
+
     .dashboard {
       grid-template-columns: 1fr;
     }
-    
+
     .filter-group {
       min-width: 100%;
     }
-    
+
     .view-controls {
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
     }
-    
+
     /* Adjust dropdown to full width on mobile */
     .dropdown-content {
       width: 100%;
       right: 0;
       left: 0;
     }
-    
+
     .dropdown-content a {
       padding: 1rem;
       justify-content: center;
@@ -2408,9 +2385,6 @@ tr.selected {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   cursor: pointer;
-  position: absolute;
-  top: 20px;
-  right: 20px;
 }
 
 .user-avatar {
@@ -2459,11 +2433,6 @@ tr.selected {
   min-height: 20px;
 }
 
-/* Adjust header to accommodate user icon */
-.header {
-  position: relative;
-  padding-right: 200px;
-}
 
 @media (max-width: 1024px) {
   .user-icon {

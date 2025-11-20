@@ -6,6 +6,7 @@ export function initAuth() {
   const loginBtn = document.getElementById('confirm-login-btn');
   const cancelLoginBtn = document.getElementById('cancel-login-btn');
   const loginModalClose = document.getElementById('login-modal-close');
+  const headerLoginBtn = document.getElementById('login-btn');
   const userIcon = document.getElementById('user-icon');
   const logoutBtn = document.getElementById('logout-btn');
   const appContent = document.getElementById('app-content');
@@ -25,6 +26,7 @@ export function initAuth() {
   function showApp() {
     appContent.style.display = 'block';
     userIcon.style.display = 'flex';
+    if (headerLoginBtn) headerLoginBtn.style.display = 'none';
 
     const user = getCurrentUser();
     if (user) {
@@ -35,6 +37,7 @@ export function initAuth() {
   function hideApp() {
     appContent.style.display = 'none';
     userIcon.style.display = 'none';
+    if (headerLoginBtn) headerLoginBtn.style.display = 'flex';
   }
 
   async function handleLogin(e) {
@@ -74,6 +77,7 @@ export function initAuth() {
   loginBtn.addEventListener('click', handleLogin);
   cancelLoginBtn.addEventListener('click', hideLoginModal);
   loginModalClose.addEventListener('click', hideLoginModal);
+  if (headerLoginBtn) headerLoginBtn.addEventListener('click', showLoginModal);
   logoutBtn.addEventListener('click', handleLogout);
 
   loginModal.addEventListener('click', (e) => {
@@ -90,6 +94,5 @@ export function initAuth() {
     showApp();
   } else {
     hideApp();
-    showLoginModal();
   }
 }
