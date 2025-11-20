@@ -2397,3 +2397,81 @@ tr.selected {
 .expense-card.selected:hover {
   transform: translateY(-2px);
 }
+
+/* User Icon and Authentication Styles */
+.user-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--foreground);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.logout-btn:hover {
+  color: var(--destructive);
+}
+
+.error-message {
+  color: var(--destructive);
+  font-size: 14px;
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+/* Adjust header to accommodate user icon */
+.header {
+  position: relative;
+  padding-right: 200px;
+}
+
+@media (max-width: 1024px) {
+  .user-icon {
+    position: static;
+    margin-bottom: 16px;
+  }
+
+  .header {
+    padding-right: 24px;
+  }
+}

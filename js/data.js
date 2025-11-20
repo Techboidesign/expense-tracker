@@ -3,6 +3,8 @@
  * Handles expense data management, filtering, and persistence
  */
 
+import * as supabaseClient from './supabase-client.js';
+
 // Main data store
 let expenses = [];
 let monthlyBudget = 0;
@@ -18,12 +20,50 @@ let activeFilters = {
 };
 
 /**
- * Initialize data from localStorage
+ * Initialize data from Supabase or localStorage
  */
-function initializeData() {
-  expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-  monthlyBudget = parseFloat(localStorage.getItem('monthlyBudget')) || 0;
-  monthlyIncome = parseFloat(localStorage.getItem('monthlyIncome')) || 0;
+async function initializeData() {
+  if (supabaseClient.isLoggedIn()) {
+    await loadFromSupabase();
+  } else {
+    expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+    monthlyBudget = parseFloat(localStorage.getItem('monthlyBudget')) || 0;
+    monthlyIncome = parseFloat(localStorage.getItem('monthlyIncome')) || 0;
+  }
+}
+
+/**
+ * Load data from Supabase
+ */
+async function loadFromSupabase() {
+  const user = supabaseClient.getCurrentUser();
+  if (!user) {
+    console.log('No user logged in, skipping Supabase load');
+    return;
+  }
+
+  const { data, error } = await supabaseClient.getExpenses();
+
+  if (error) {
+    console.error('Error loading from Supabase:', error);
+    return;
+  }
+
+  expenses = data.map(exp => ({
+    id: exp.id,
+    name: exp.name,
+    category: exp.category,
+    recurrence: exp.recurrence,
+    amount: parseFloat(exp.amount),
+    dueDate: exp.due_date,
+    notes: exp.notes || '',
+    createdAt: exp.created_at
+  }));
+
+  monthlyBudget = parseFloat(user.monthly_budget) || 0;
+  monthlyIncome = parseFloat(user.monthly_income) || 0;
+
+  console.log(`Loaded ${expenses.length} expenses from Supabase`);
 }
 
 /**
@@ -37,9 +77,31 @@ function saveExpenses() {
  * Add a new expense
  * @param {Object} expense - The expense object to add
  */
-function addExpense(expense) {
-  expenses.push(expense);
-  saveExpenses();
+async function addExpense(expense) {
+  if (supabaseClient.isLoggedIn()) {
+    const expenseData = {
+      id: expense.id,
+      name: expense.name,
+      category: expense.category,
+      recurrence: expense.recurrence,
+      amount: expense.amount,
+      due_date: expense.dueDate,
+      notes: expense.notes || ''
+    };
+
+    const { data, error } = await supabaseClient.addExpense(expenseData);
+
+    if (error) {
+      console.error('Error adding expense to Supabase:', error);
+      alert('Error saving expense: ' + error);
+      return;
+    }
+
+    expenses.push(expense);
+  } else {
+    expenses.push(expense);
+    saveExpenses();
+  }
 }
 
 /**
@@ -48,19 +110,40 @@ function addExpense(expense) {
  * @param {Object} updatedExpense - The updated expense data
  * @returns {boolean} - Whether the update was successful
  */
-function updateExpense(id, updatedExpense) {
+async function updateExpense(id, updatedExpense) {
   const index = expenses.findIndex(exp => exp.id === id);
-  
+
   if (index !== -1) {
+    if (supabaseClient.isLoggedIn()) {
+      const updates = {
+        name: updatedExpense.name,
+        category: updatedExpense.category,
+        recurrence: updatedExpense.recurrence,
+        amount: updatedExpense.amount,
+        due_date: updatedExpense.dueDate,
+        notes: updatedExpense.notes || ''
+      };
+
+      const { error } = await supabaseClient.updateExpense(id, updates);
+
+      if (error) {
+        console.error('Error updating expense in Supabase:', error);
+        alert('Error updating expense: ' + error);
+        return false;
+      }
+    }
+
     expenses[index] = {
       ...expenses[index],
       ...updatedExpense
     };
-    
-    saveExpenses();
+
+    if (!supabaseClient.isLoggedIn()) {
+      saveExpenses();
+    }
     return true;
   }
-  
+
   return false;
 }
 
@@ -69,34 +152,57 @@ function updateExpense(id, updatedExpense) {
  * @param {number} id - The ID of the expense to delete
  * @returns {boolean} - Whether the deletion was successful
  */
-function deleteExpense(id) {
+async function deleteExpense(id) {
   const initialLength = expenses.length;
+
+  if (supabaseClient.isLoggedIn()) {
+    const { error } = await supabaseClient.deleteExpense(id);
+
+    if (error) {
+      console.error('Error deleting expense from Supabase:', error);
+      alert('Error deleting expense: ' + error);
+      return false;
+    }
+  }
+
   expenses = expenses.filter(exp => exp.id !== id);
-  
+
   if (expenses.length < initialLength) {
-    saveExpenses();
+    if (!supabaseClient.isLoggedIn()) {
+      saveExpenses();
+    }
     return true;
   }
-  
+
   return false;
 }
 
 /**
- * Set monthly budget and save to localStorage
+ * Set monthly budget and save to Supabase or localStorage
  * @param {number} amount - The budget amount
  */
-function setMonthlyBudget(amount) {
+async function setMonthlyBudget(amount) {
   monthlyBudget = amount;
-  localStorage.setItem('monthlyBudget', amount);
+
+  if (supabaseClient.isLoggedIn()) {
+    await supabaseClient.updateUserBudget(amount, undefined);
+  } else {
+    localStorage.setItem('monthlyBudget', amount);
+  }
 }
 
 /**
- * Set monthly income and save to localStorage
+ * Set monthly income and save to Supabase or localStorage
  * @param {number} amount - The income amount
  */
-function setMonthlyIncome(amount) {
+async function setMonthlyIncome(amount) {
   monthlyIncome = amount;
-  localStorage.setItem('monthlyIncome', amount);
+
+  if (supabaseClient.isLoggedIn()) {
+    await supabaseClient.updateUserBudget(undefined, amount);
+  } else {
+    localStorage.setItem('monthlyIncome', amount);
+  }
 }
 
 /**
@@ -479,5 +585,7 @@ export {
   calculateMonthlyTotal,
   calculateYearlyTotal,
   getCategorySums,
-  migrateExpensesData
+  migrateExpensesData,
+  loadFromSupabase,
+  clearAllExpenses
 };

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database Setup - Expense Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .status {
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .status.info {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .status.success {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+    .status.error {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+    button {
+      background: #0f172a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #1e293b;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .credentials {
+      background: #f8f9fa;
+      padding: 20px;
+      border-left: 4px solid #0f172a;
+      margin-top: 20px;
+    }
+    .credentials h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker Database Setup</h1>
+    <p>This will create the necessary database tables and import the initial expense data.</p>
+
+    <button id="setup-btn" onclick="runSetup()">Run Database Setup</button>
+
+    <div id="status-container"></div>
+
+    <div id="credentials" class="credentials" style="display: none;">
+      <h3>Setup Complete!</h3>
+      <p>Login credentials:</p>
+      <p><strong>Username:</strong> User</p>
+      <p><strong>Password:</strong> 123456</p>
+      <p><a href="index.html">Go to Expense Tracker</a></p>
+    </div>
+  </div>
+
+  <script type="module">
+    const SUPABASE_URL = 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
+
+    function addStatus(message, type = 'info') {
+      const container = document.getElementById('status-container');
+      const status = document.createElement('div');
+      status.className = `status ${type}`;
+      status.textContent = message;
+      container.appendChild(status);
+    }
+
+    window.runSetup = async function() {
+      const btn = document.getElementById('setup-btn');
+      btn.disabled = true;
+      btn.textContent = 'Setting up...';
+
+      document.getElementById('status-container').innerHTML = '';
+      document.getElementById('credentials').style.display = 'none';
+
+      try {
+        addStatus('Initializing Supabase client...');
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        addStatus('Creating demo user...');
+        const { data: existingUser } = await supabase
+          .from('users')
+          .select('id')
+          .eq('username', 'User')
+          .maybeSingle();
+
+        let userId;
+
+        if (!existingUser) {
+          const { data: newUser, error } = await supabase
+            .from('users')
+            .insert([{
+              username: 'User',
+              password_hash: '123456',
+              monthly_budget: 3000,
+              monthly_income: 3500
+            }])
+            .select()
+            .single();
+
+          if (error) throw error;
+
+          userId = newUser.id;
+          addStatus('Demo user created successfully', 'success');
+        } else {
+          userId = existingUser.id;
+          addStatus('Demo user already exists', 'info');
+        }
+
+        addStatus('Loading expense data...');
+        const response = await fetch('./data/expense_tracker_data.json');
+        const expenses = await response.json();
+
+        addStatus(`Importing ${expenses.length} expenses...`);
+
+        let imported = 0;
+        for (const expense of expenses) {
+          const expenseData = {
+            id: expense.id,
+            user_id: userId,
+            name: expense.name,
+            category: expense.category,
+            recurrence: expense.recurrence,
+            amount: expense.amount,
+            due_date: expense.dueDate,
+            notes: expense.notes || '',
+            created_at: expense.createdAt
+          };
+
+          const { error } = await supabase
+            .from('expenses')
+            .upsert([expenseData], { onConflict: 'id' });
+
+          if (!error) {
+            imported++;
+          }
+        }
+
+        addStatus(`Successfully imported ${imported} expenses`, 'success');
+        addStatus('Database setup complete!', 'success');
+
+        document.getElementById('credentials').style.display = 'block';
+        btn.style.display = 'none';
+
+      } catch (error) {
+        console.error('Setup error:', error);
+        addStatus(`Error: ${error.message}`, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Retry Setup';
+      }
+    };
+  </script>
+</body>
+</html>
