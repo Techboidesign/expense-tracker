@@ -1,0 +1,198 @@
+[
+  {
+    "id": 1741280574468,
+    "name": "Barcelona Room",
+    "category": "Housing",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 700,
+    "dueDate": "2025-03-01",
+    "notes": "Monthly rent",
+    "createdAt": "2025-03-06T17:02:54.468Z"
+  },
+  {
+    "id": 1741280594826,
+    "name": "Granada Rent",
+    "category": "Housing",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 400,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:03:14.826Z"
+  },
+  {
+    "id": 1741280615284,
+    "name": "Netflix",
+    "category": "Subscriptions",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 9.99,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:03:35.284Z"
+  },
+  {
+    "id": 1741280636313,
+    "name": "Medium",
+    "category": "Subscriptions",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 5,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:03:56.313Z"
+  },
+  {
+    "id": 1741280677393,
+    "name": "Donkey Republic Bikes",
+    "category": "Transportation",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 20,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:04:37.393Z"
+  },
+  {
+    "id": 1741280712228,
+    "name": "Bicing",
+    "category": "Transportation",
+    "expenseType": "Recurring",
+    "recurrence": "Yearly",
+    "amount": 50,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:05:12.228Z"
+  },
+  {
+    "id": 1741280742165,
+    "name": "Apple TV",
+    "category": "Subscriptions",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 9.99,
+    "dueDate": "2025-03-25",
+    "notes": "",
+    "createdAt": "2025-03-06T17:05:42.165Z"
+  },
+  {
+    "id": 1741280778481,
+    "name": "Supermarket Food",
+    "category": "Food",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 350,
+    "dueDate": "2025-03-01",
+    "notes": "",
+    "createdAt": "2025-03-06T17:06:18.481Z"
+  },
+  {
+    "id": 1741280827008,
+    "name": "Coffee",
+    "category": "Food",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 120,
+    "dueDate": "2025-03-06",
+    "notes": "",
+    "createdAt": "2025-03-06T17:07:07.008Z"
+  },
+  {
+    "id": 1741280849261,
+    "name": "Eating Out",
+    "category": "Food",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 350,
+    "dueDate": "2025-03-06",
+    "notes": "",
+    "createdAt": "2025-03-06T17:07:29.261Z"
+  },
+  {
+    "id": 1741280892123,
+    "name": "Gympass",
+    "category": "Health",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 36,
+    "dueDate": "2025-03-06",
+    "notes": "",
+    "createdAt": "2025-03-06T17:08:12.123Z"
+  },
+  {
+    "id": 1741280919641,
+    "name": "Plane Tickets",
+    "category": "Personal",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 250,
+    "dueDate": "2025-03-06",
+    "notes": "",
+    "createdAt": "2025-03-06T17:08:39.641Z"
+  },
+  {
+    "id": 1741604708178,
+    "name": "Barcelona Room Services",
+    "category": "Utilities",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 50,
+    "dueDate": "2025-04-01",
+    "notes": "",
+    "createdAt": "2025-03-10T11:05:08.178Z"
+  },
+  {
+    "id": 1741604739282,
+    "name": "Adobe Creative Cloud",
+    "category": "Subscriptions",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 30,
+    "dueDate": "2025-03-10",
+    "notes": "",
+    "createdAt": "2025-03-10T11:05:39.282Z"
+  },
+  {
+    "id": 1741604750032,
+    "name": "Adobe Lightroom",
+    "category": "Subscriptions",
+    "expenseType": "Recurring",
+    "recurrence": "Monthly",
+    "amount": 10,
+    "dueDate": "2025-03-10",
+    "notes": "",
+    "createdAt": "2025-03-10T11:05:50.032Z"
+  },
+  {
+    "id": 1741691387212,
+    "name": "SHIFTA Elisava Posgrado",
+    "category": "Education",
+    "expenseType": "One-time",
+    "recurrence": "One-time",
+    "amount": 3200,
+    "dueDate": "2025-01-01",
+    "notes": "Posgrado de Shifta",
+    "createdAt": "2025-03-11T11:09:47.212Z"
+  },
+  {
+    "id": 1741737150426,
+    "name": "Memorisely",
+    "category": "Education",
+    "recurrence": "One-time",
+    "amount": 118,
+    "dueDate": "2025-09-20",
+    "notes": "",
+    "createdAt": "2025-03-11T23:52:30.426Z"
+  },
+  {
+    "id": 1741737174638,
+    "name": "Codecademy",
+    "category": "Education",
+    "recurrence": "One-time",
+    "amount": 120,
+    "dueDate": "2025-11-01",
+    "notes": "",
+    "createdAt": "2025-03-11T23:52:54.638Z"
+  }
+]
